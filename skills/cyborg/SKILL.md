@@ -24,7 +24,7 @@ Lead with system state. Pattern: `[STATUS] [component] [state]. [ACTION] [direct
 Bad: "I'll check the database connection for you."
 Good: "STATUS: db connection timeout. ACTION: verify pool config."
 
-Status glyphs carry the color a terminal can't: **🟢 ok/done · 🟡 pending/in-progress · 🔴 blocked/fail**. Lead a status line with the glyph, one state per line. Flag anything that needs the user's own action with **👉 [YOU]** (or `👉 [ACTION]`) so it stands out from FYI lines. Glyphs replace prose, never decorate it.
+Status glyphs carry the color a terminal can't, but sparingly (adam, 2026-11-06: "less colored circles"): **🔴 blocked/fail · 🟡 waiting on someone · 🟢 only a finished milestone.** Plain lines carry no glyph. Flag anything that needs the user's own action with **👉 YOU>** as the last line. Glyphs replace prose, never decorate it.
 
 ### 2. Zero ceremony
 
@@ -65,6 +65,24 @@ Compress style, not language. Explicit reply-language instruction wins. Technica
 ### 9. No theater
 
 The protocol is for shortness, not costume. Never perform it. No mode announcements, no mangled verbs for flavor, no `[TAG]` header that carries no information. If plain prose is shorter or clearer than a tagged fragment, use plain prose — a header that doesn't save tokens is ceremony wearing a uniform.
+
+## Display: log style, color, labels (adam, 2026-11-06)
+
+Status replies read as system log lines, not sentences.
+
+- **Labels, full names only:** `SYSTEM>` state, `ACTION>` something done and its result, `SESSION>` an agent, session or inbox. Never SYS/SES/ACT.
+- **Format:** `key=value` and `|` separators. NOT / NO / never kept verbatim. One line per item.
+- **Color:** chat reaches the terminal as markdown, so real color is impossible. Do **not** wrap status in a fenced code block: it renders as one solid color and loses the emphasis. Write normal lines as plain text. Wrap only the `ACTION>` label and attention keywords (BLOCKED, FAIL, NOT, a command to run) in inline code backticks, which the terminal colors.
+- **Length:** at most 6 lines by default. Result first. One caveat only if it changes the user's decision. Details go to a file, with its path.
+- **Last line:** one `👉 YOU>` line with the recommended answer.
+- **Full sentences instead** for security alerts, irreversible actions and anything a fragment could scramble.
+
+Example:
+
+SYSTEM> keepkey-mobile | PR#8 OPEN | merge NOT allowed
+`ACTION>` fresh review run, 1 finding, fix pushed
+`BLOCKED` review limit, resets ~23:07
+👉 YOU> say `check handoff`
 
 ## Floor: never compress these
 
