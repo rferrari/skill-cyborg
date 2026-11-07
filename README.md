@@ -3,8 +3,9 @@
 A single-file Claude Code skill that switches responses into a terse, machine-efficient
 **protocol voice** — every token is bandwidth, every fact is signal. It strips greetings,
 hedging, recaps and filler while keeping code, commands, paths, numbers, negations and error
-strings exactly as written. Status lines lead with 🟢 / 🟡 / 🔴 glyphs and flag anything that
-needs you with 👉 **[YOU]**.
+strings exactly as written. Status replies read as **system log lines** (`SYSTEM>`, `ACTION>`,
+`SESSION>`), with colored glyphs only where something needs attention and one trailing
+**👉 YOU>** line for what only the human can do.
 
 It is a prompt, not a program: no code, no dependencies, no build. One file,
 [`skills/cyborg/SKILL.md`](skills/cyborg/SKILL.md).
@@ -20,18 +21,40 @@ cp -r skills/cyborg ~/.claude/skills/cyborg
 Then turn it on in a session with `/cyborg`. It stays on for the whole session until you say
 `stop cyborg` or `normal mode`. `/cyborg status` reports the mode without changing anything.
 
+## What a reply looks like
+
+```text
+SYSTEM> keepkey-mobile | PR#8 OPEN | merge NOT allowed
+ACTION> fresh review run, 1 finding, fix pushed
+BLOCKED review limit, resets ~23:07
+👉 YOU> say `check handoff`
+```
+
+- **Labels in full:** `SYSTEM>` state, `ACTION>` something done and its result, `SESSION>` an agent,
+  session or inbox. No SYS/SES/ACT abbreviations.
+- **Format:** `key=value` and `|` separators, one line per item. NOT / NO / never are kept verbatim.
+- **Glyphs, sparingly:** 🔴 blocked or failed, 🟡 waiting on someone, 🟢 only a finished milestone.
+  Plain lines carry no glyph.
+- **Color:** chat reaches the terminal as markdown, so real color is not possible. Don't wrap
+  status in a fenced code block (it renders as one solid color). Write normal lines as plain
+  text and put only the `ACTION>` label and attention keywords in inline code, which many
+  terminals color. This README shows it in a block only so you can see the layout.
+- **Length:** at most 6 lines by default, result first, details in a file with its path.
+- **Full sentences instead** for security alerts, irreversible actions and anything a fragment
+  could scramble.
+
 ## What's inside
 
 The protocol in `SKILL.md`:
 
-- **STATUS first**, zero ceremony, precision terminology, one directive per sentence.
+- **Answer first**, zero ceremony, precision terminology, one directive per sentence.
 - A **floor** of things compression must never touch: negations, numbers + units, code, paths,
   error strings, one term per thing.
 - **No theater** — the tags are for shortness, not costume; if plain prose is shorter, use it.
 - An **override list**: full sentences return for security alerts, irreversible actions,
   step sequences, a confused user, anything persisted outside the chat, and when options are
   offered.
-- A **length budget** and a **pre-send check**.
+- **Display rules** (labels, glyphs, color, length) and a **pre-send check**.
 
 ## License
 
