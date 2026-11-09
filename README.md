@@ -21,6 +21,17 @@ cp -r skills/cyborg ~/.claude/skills/cyborg
 Then turn it on in a session with `/cyborg`. It stays on for the whole session until you say
 `stop cyborg` or `normal mode`. `/cyborg status` reports the mode without changing anything.
 
+## Companion skill: brainstorm
+
+[`skills/brainstorm/SKILL.md`](skills/brainstorm/SKILL.md) is a second, independent skill for the same way of working.
+When you float an idea mid-task ("maybe...", "what if...", "idk"), it is written to the project's backlog as a
+numbered entry with open questions, **not built**; ideas get reviewed later and only then planned. It does not
+depend on `cyborg`, and `cyborg` does not depend on it.
+
+```bash
+cp -r skills/brainstorm ~/.claude/skills/brainstorm
+```
+
 ## What a reply looks like
 
 ```text
